@@ -1,0 +1,36 @@
+name: Deploy to SproutOS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    # This repository is copied as a template. Its generated businesses deploy; the pristine
+    # template itself has no SproutOS project and should only run CI.
+    if: github.repository != 'MySproutOS/sproutbiz-business-template'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter website build
+      - uses: MySproutOS/sproutos-deploy-action@0d5ce8bb74ecd598ae996c34d7d2cb5ac156a180
+        with:
+          preset: next
+          directory: apps/website/.next/standalone
+          static-paths: |
+            apps/website/.next/static:_next/static
+            apps/website/public:
+          api-url: https://api.sproutos.me
