@@ -1,5 +1,10 @@
 # Template NextJS
 
+Repositories created from this SproutBiz business template build and deploy to SproutOS on every
+push to `main`. The workflow uses GitHub OIDC, so generated repositories need no long-lived deploy
+secret. The initial provisioning worker dispatches the same workflow after it creates the matching
+SproutOS project.
+
 Stack: NextJS, ShadCN, Kysely, Vitest, Tailwind, HonoJS, PostgreSQL
 
 Includes authentication via Google, database migrations, CI pipeline, a basic structure
